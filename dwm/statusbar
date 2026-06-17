@@ -1,0 +1,41 @@
+#! /bin/sh
+
+while true; do
+    BAT0=$(cat /sys/class/power_supply/BAT0/capacity)
+    
+    case 1 in
+	$(( BAT0 > 25 )) )
+	    SYMBOL="🔋"
+	    ;;
+	*)
+	    SYMBOL="🪫"
+	    ;;
+    esac
+
+    BATSTATUS=$( cat /sys/class/power_supply/BAT0/status )
+
+    case "$BATSTATUS" in
+	"Charging" )
+	    CHARGE_SYMBOL=" ▞"
+	    ;;
+        "Discharging" )
+	    CHARGE_SYMBOL=" ▚"
+	    ;;
+        "Not charging" )
+	    CHARGE_SYMBOL=" X"
+	    ;;
+	"Full" )
+	    CHARGE_SYMBOL=" ■"
+	    ;;
+        "Unknown" )
+	    CHARGE_SYMBOL=" ?"
+	    ;;
+	*)
+	    CHARGE_SYMBOL=" -"
+	    ;;
+    esac
+
+    xsetroot -name " $(date +%d' '%b' '%H:%M) $SYMBOL$(echo $BAT0)%$CHARGE_SYMBOL ~$(whoami) "
+
+    sleep $((60 - $(date +%S)))
+done
