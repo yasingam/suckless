@@ -1,50 +1,71 @@
 #! /bin/sh
 
-while true; do
-    CAPACITY_FILE="/sys/class/power_supply/BAT0/capacity"
-    
-    # first check if there is a battery
-    if [ -f "$CAPACITY_FILE" ]; then
-        BAT0=$(cat /sys/class/power_supply/BAT0/capacity)
-    
-        case 1 in
-            $(( BAT0 > 25 )) )
-	        SYMBOL="🔋"
-	        ;;
-	    *)
-	        SYMBOL="🪫"
-	        ;;
+CAPACITY_FILE="/sys/class/power_supply/BAT0/capacity"
+if [ -f "$CAPACITY_FILE" ]; then
+    BAT_EXISTS=1
+else
+    BAT_EXISTS=0
+fi
+
+minute_loop() {
+    while true; do
+        update_bar
+        sleep $((60 - $(date +%S)))
+    done
+}
+
+audio_loop() {
+    pactl subscribe | while read -r event; do
+        case "$event" in
+            *sink*)
+                update_bar
+                ;;
         esac
+    done
+}
+
+update_bar() {
+    if [ "$BAT_EXISTS" -eq 1 ]; then
+        BAT0=$( cat "$CAPACITY_FILE" )
+        if [ "$BAT0" -gt 25 ]; then
+            SYMBOL="🔋"
+        else
+            SYMBOL="🪫"
+        fi
 
         BATSTATUS=$( cat /sys/class/power_supply/BAT0/status )
 
         case "$BATSTATUS" in
-	    "Charging" )
-	        CHARGE_SYMBOL=" ▞"
-	        ;;
+            "Charging" )
+                CHARGE_SYMBOL=" ▞"
+                ;;
             "Discharging" )
-	        CHARGE_SYMBOL=" ▚"
-	        ;;
+                CHARGE_SYMBOL=" ▚"
+                ;;
             "Not charging" )
-	        CHARGE_SYMBOL=" X"
-	        ;;
-	    "Full" )
-	        CHARGE_SYMBOL=" ■"
-	        ;;
+                CHARGE_SYMBOL=" X"
+                ;;
+            "Full" )
+                CHARGE_SYMBOL=" ■"
+                ;;
             "Unknown" )
-	        CHARGE_SYMBOL=" ?"
-	        ;;
-	    *)
-	        CHARGE_SYMBOL=" -"
-	        ;;
+                CHARGE_SYMBOL=" ?"
+                ;;
+            *)
+                CHARGE_SYMBOL=" -"
+                ;;
         esac
-
-        xsetroot -name " $(date +%d' '%b' '%H:%M) $SYMBOL$(echo $BAT0)%$CHARGE_SYMBOL ~$(whoami) "
-
-    else
-	# when there is no battery - don't show battery metrics
-        xsetroot -name " $(date +%d' '%b' '%H:%M) ~$(whoami) "
     fi
 
-    sleep $((60 - $(date +%S)))
-done
+    VOL=$( pactl get-sink-volume @DEFAULT_SINK@ | awk '{ print $5 }' )
+
+    if [ "$BAT_EXISTS" -eq 1 ]; then
+        xsetroot -name " VOL $VOL $(date +%d' '%b' '%H:%M) $SYMBOL$(echo $BAT0)%$CHARGE_SYMBOL ~$(whoami) "
+    else
+        xsetroot -name " VOL $VOL $(date +%d' '%b' '%H:%M) ~$(whoami) "
+    fi
+}
+
+minute_loop &
+audio_loop &
+wait
