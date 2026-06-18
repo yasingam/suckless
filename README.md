@@ -7,3 +7,8 @@ This is just a central place for me to keep track of the setup across devices
 Updates to status bar:
 - Fixed battery monitor, deactivated when not present
 - Added volume indicator (pactl subscribe)
+
+Updates to keybindings
+- Dmenu spawns with Mod+d
+- Firefox spawns with Mod+f
+- Made placeholders for future keys
