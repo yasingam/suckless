@@ -60,9 +60,10 @@ update_bar() {
     VOL=$( pactl get-sink-volume @DEFAULT_SINK@ | awk '{ print $5 }' )
 
     if [ "$BAT_EXISTS" -eq 1 ]; then
-        xsetroot -name " VOL $VOL $(date +%d' '%b' '%H:%M) $SYMBOL$(echo $BAT0)%$CHARGE_SYMBOL ~$(whoami) "
+        xsetroot -name " $(date +%d' '%b' '%H:%M) $SYMBOL$(echo $BAT0)%$CHARGE_SYMBOL VOL $VOL ~$(whoami) "
+
     else
-        xsetroot -name " VOL $VOL $(date +%d' '%b' '%H:%M) ~$(whoami) "
+        xsetroot -name " $(date +%d' '%b' '%H:%M) VOL $VOL ~$(whoami) "
     fi
 }
 

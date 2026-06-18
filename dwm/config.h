@@ -1,5 +1,7 @@
 /* See LICENSE file for copyright and license details. */
 
+#include <X11/XF86keysym.h> // volume key control
+
 /* appearance */
 static const unsigned int borderpx  = 1;        /* border pixel of windows */
 static const unsigned int snap      = 32;       /* snap pixel */
@@ -45,6 +47,11 @@ static const Layout layouts[] = {
 	{ "[M]",      monocle },
 };
 
+/* volume */
+static const char *volup[]   = { "pactl", "set-sink-volume", "@DEFAULT_SINK@", "+5%", NULL };
+static const char *voldown[] = { "pactl", "set-sink-volume", "@DEFAULT_SINK@", "-5%", NULL };
+static const char *volmute[] = { "pactl", "set-sink-mute", "@DEFAULT_SINK@", "toggle", NULL };
+
 /* key definitions */
 #define MODKEY Mod4Mask
 #define TAGKEYS(KEY,TAG) \
@@ -60,8 +67,12 @@ static const Layout layouts[] = {
 static char dmenumon[2] = "0"; /* component of dmenucmd, manipulated in spawn() */
 static const char *dmenucmd[] = { "dmenu_run", "-m", dmenumon, "-fn", dmenufont, "-nb", col_gray1, "-nf", col_gray3, "-sb", col_cyan, "-sf", col_gray4, NULL };
 static const char *termcmd[]  = { "st", NULL };
+static const char *slockcmd[] = { "slock", NULL };
 
 static const Key keys[] = {
+        { 0,    XF86XK_AudioRaiseVolume,    spawn,    {.v = volup }},
+        { 0,    XF86XK_AudioLowerVolume,    spawn,    {.v = voldown }},
+        { 0,    XF86XK_AudioMute,           spawn,    {.v = volmute }},
 	/* modifier                     key        function        argument */
       //{ MODKEY,                       XK_a,      ,               {} },
 	{ MODKEY,                       XK_b,      togglebar,      {0} },
@@ -82,13 +93,13 @@ static const Key keys[] = {
       //{ MODKEY,                       XK_q,      ,               {} },
       //{ MODKEY,                       XK_r,      ,               {} },
       //{ MODKEY,                       XK_s,      ,               {} },
-	{ MODKEY,                       XK_t,      setlayout,      {.v = &layouts[0]} },
+        { MODKEY,                       XK_t,      spawn,          {.v = termcmd } },
       //{ MODKEY,                       XK_u,      ,               {} },
       //{ MODKEY,                       XK_v,      ,               {} },
       //{ MODKEY,                       XK_w,      ,               {} },
       //{ MODKEY,                       XK_x,      ,               {} },
       //{ MODKEY,                       XK_y,      ,               {} },
-      //{ MODKEY,                       XK_z,      ,               {} },
+        { MODKEY,                       XK_z,      spawn,          {.v = slockcmd } },
 	{ MODKEY,                       XK_0,      view,           {.ui = ~0 } },
 	{ MODKEY,                       XK_space,  setlayout,      {0} },
 	{ MODKEY,                       XK_Return, zoom,           {0} },
@@ -114,14 +125,14 @@ static const Key keys[] = {
 	{ MODKEY|ShiftMask,             XK_q,      quit,           {0} },
       //{ MODKEY|ShiftMask,             XK_r,      ,               {} },
       //{ MODKEY|ShiftMask,             XK_s,      ,               {} },
-      //{ MODKEY|ShiftMask,             XK_t,      ,               {} },
+	{ MODKEY|ShiftMask,             XK_t,      setlayout,      {.v = &layouts[0]} },
       //{ MODKEY|ShiftMask,             XK_u,      ,               {} },
       //{ MODKEY|ShiftMask,             XK_v,      ,               {} },
       //{ MODKEY|ShiftMask,             XK_w,      ,               {} },
       //{ MODKEY|ShiftMask,             XK_x,      ,               {} },
       //{ MODKEY|ShiftMask,             XK_y,      ,               {} },
       //{ MODKEY|ShiftMask,             XK_z,      ,               {} },
-	{ MODKEY|ShiftMask,             XK_Return, spawn,          {.v = termcmd } },
+      //{ MODKEY|ShiftMask,             XK_Return, ,               {} },
 	{ MODKEY|ShiftMask,             XK_period, tagmon,         {.i = +1 } },
 	{ MODKEY|ShiftMask,             XK_comma,  tagmon,         {.i = -1 } },
 	{ MODKEY|ShiftMask,             XK_space,  togglefloating, {0} },
