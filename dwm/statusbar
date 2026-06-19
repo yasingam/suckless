@@ -10,7 +10,7 @@ fi
 minute_loop() {
     while true; do
         update_bar
-        sleep $((60 - $(date +%S)))
+        sleep $((60 - $(date +%-S))) # note the -S removes leading zeroes
     done
 }
 
