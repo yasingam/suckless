@@ -13,4 +13,4 @@ Updates to keybindings
 - Firefox spawns with Mod+f
 - Made placeholders for future keys
 
-Fixed time advancement issue: the clock was not consitently updating. This is thought to be as a result of `date` output giving seconds with leading zeroes in the event that the seconds are less than 10. It Bash apparently interprets integers with leading zeroes as octal. This was corrected by using `%-S` rather than `%S` to find seconds.
+Fixed time advancement issue: the clock was not consistently updating. This is thought to be as a result of `date` output giving seconds with leading zeroes in the event that the seconds are less than 10. It Bash apparently interprets integers with leading zeroes as octal. This was corrected by using `%-S` rather than `%S` to find seconds.
