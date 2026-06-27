@@ -66,7 +66,14 @@ static const char *volmute[] = { "pactl", "set-sink-mute", "@DEFAULT_SINK@", "to
 /* commands */
 static char dmenumon[2] = "0"; /* component of dmenucmd, manipulated in spawn() */
 static const char *dmenucmd[] = { "dmenu_run", "-m", dmenumon, "-fn", dmenufont, "-nb", col_gray1, "-nf", col_gray3, "-sb", col_cyan, "-sf", col_gray4, NULL };
-static const char *termcmd[]  = { "st", NULL };
+/* standard st only
+static const char *termcmd[]  = { "st", NULL }; */
+// launch tmux by default
+// "st" - launch st, "-e" - execute command in st, "tmux" - command executed, "new-session" - new tmux session
+// "-A" - attach to new session, "-s" - attach to the `main` session if already exists, "NULL" - end command
+static const char *termcmd[] = {"st", "-e", "tmux", "new-session", "-A", "-s", "main", NULL};
+
+// lock screen
 static const char *slockcmd[] = { "slock", NULL };
 
 static const Key keys[] = {
