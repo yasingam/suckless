@@ -13,6 +13,7 @@ This is just a central place for me to keep track of the setup across devices
 - Dmenu spawns with Mod+d
 - Firefox spawns with Mod+f
 - Made placeholders for future keys
+- Went back to Super+Shift+Return to spawn terminal
 
 ## Updates to st terminal emulator:
 - changed font to `JetBrains Mono NL` (see installation instructions)
