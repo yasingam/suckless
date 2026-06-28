@@ -13,7 +13,10 @@ This is just a central place for me to keep track of the setup across devices
 - Dmenu spawns with Mod+d
 - Firefox spawns with Mod+f
 - Made placeholders for future keys
-- Went back to Super+Shift+Return to spawn terminal
+- Went back to Super+Shift+Return to spawn terminal with tmux
+- Super+Shift+t spawns st without tmux open
+- Added a binding for screenshots - Printscreen key (requires flameshot)
+
 
 ## Updates to st terminal emulator:
 - changed font to `JetBrains Mono NL` (see installation instructions)

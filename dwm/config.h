@@ -73,13 +73,24 @@ static const char *termcmd[]  = { "st", NULL }; */
 // "-A" - attach to new session, "-s" - attach to the `main` session if already exists, "NULL" - end command
 static const char *termcmd[] = {"st", "-e", "tmux", "new-session", "-A", "-s", "main", NULL};
 
+// lauch a clean st without tmux
+// useful for instance if I want to attach to a session other than main
+static const char *term_st_cmd[] = {"st", NULL};
+
+// screenshots
+// Install flameshot: sudo apt install flameshot
+static const char *flameshotcmd[] = {"flameshot", "gui", NULL};
+
 // lock screen
 static const char *slockcmd[] = { "slock", NULL };
 
 static const Key keys[] = {
+	// volume
         { 0,    XF86XK_AudioRaiseVolume,    spawn,    {.v = volup }},
         { 0,    XF86XK_AudioLowerVolume,    spawn,    {.v = voldown }},
         { 0,    XF86XK_AudioMute,           spawn,    {.v = volmute }},
+	// screenshot
+	{0,	XK_Print,	spawn,	{.v = flameshotcmd }},
 	/* modifier                     key        function        argument */
       //{ MODKEY,                       XK_a,      ,               {} },
 	{ MODKEY,                       XK_b,      togglebar,      {0} },
@@ -132,7 +143,7 @@ static const Key keys[] = {
 	{ MODKEY|ShiftMask,             XK_q,      quit,           {0} },
       //{ MODKEY|ShiftMask,             XK_r,      ,               {} },
       //{ MODKEY|ShiftMask,             XK_s,      ,               {} },
-      //{ MODKEY|ShiftMask,             XK_t,      ,               {} },
+        { MODKEY|ShiftMask,             XK_t, spawn,          {.v = term_st_cmd } },
       //{ MODKEY|ShiftMask,             XK_u,      ,               {} },
       //{ MODKEY|ShiftMask,             XK_v,      ,               {} },
       //{ MODKEY|ShiftMask,             XK_w,      ,               {} },
